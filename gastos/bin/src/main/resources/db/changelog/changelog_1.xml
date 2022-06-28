@@ -1,0 +1,19 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+   <changeSet id="1" author="DiogoOdelli">
+   	   <createSequence sequenceName="seq_gasto" minValue="1" startValue="1" incrementBy="1"/>	
+       <createTable tableName="tb_gastos" schemaName="public">
+          <column name="id" type="bigint" defaultValue="nextval('seq_gasto')">
+                <constraints primaryKey="true"/>
+           </column>
+           <column name="nome_pessoa" type="varchar(255)"/>
+           <column name="descricao" type="varchar(255)"/>
+           <column name="data_hora" type="timestamp"/>
+           <column name="valor" type="double"/>
+           <column name="tags" type="varchar(255)"/>
+       </createTable>
+   </changeSet>
+</databaseChangeLog>

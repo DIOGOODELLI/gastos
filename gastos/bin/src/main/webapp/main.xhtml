@@ -1,0 +1,94 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+        <h1><h:outputText value="Gastos" /></h1>
+        <p:ajaxStatus oncomplete="#{gastosBean.retornarGastos()}" />
+        <h:form id="form">
+        <p:messages />
+            <p:growl id="mensagens" showDetail="true" sticky="false" life="12000">
+                <p:autoUpdate />
+            </p:growl>
+            <br />            
+            <p:panel header="Novo Registro" toggleable="false" id="painelCadastro" >
+              <p:inputText type="hidden" value="#{gastosBean.gastosDTO.id}"/>
+                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+                   	<p:column>
+				        <p:outputLabel for="descricaoGasto" value="Descrição: "/>
+			        </p:column>    
+			        <p:column>
+				        <p:inputText id="descricaoGasto" value="#{gastosBean.gastosDTO.descricao}" required="true" requiredMessage="Descrição é obrigatório"/>
+			        </p:column>
+                 	<p:column>
+				        <p:outputLabel for="nomePessoa" value="Nome da pessoa: "/>
+			        </p:column>    
+			        <p:column>
+				        <p:inputText id="nomePessoa" value="#{gastosBean.gastosDTO.nomePessoa}" required="true" requiredMessage="Nome da pessoa é obrigatório"/>
+			        </p:column>
+			        <p:column>
+				        <p:outputLabel for="dataHora" value="Data/Hora: "/>
+			        </p:column>    
+			        <p:column>      
+			        	<p:datePicker id="dataHora" value="#{gastosBean.gastosDTO.dataHora}" showTime="true"  required="true" requiredMessage="Data é obrigatório"/>
+			        </p:column>
+			        <p:column>
+				        <p:outputLabel for="valor" value="Valor: "/>
+			        </p:column>    
+			        <p:column>
+				        <p:inputNumber decimalPlaces="2" id="valor" value="#{gastosBean.gastosDTO.valor}" required="true" requiredMessage="Valor é obrigatório"/>
+			        </p:column>
+			     	<p:column>
+				        <p:outputLabel for="tags" value="Tags: "/>
+			        </p:column>    
+			        <p:column>
+				        <p:inputText id="tags" value="#{gastosBean.gastosDTO.tags}"  required="true" requiredMessage="Tags é obrigatório"/>
+			        </p:column>
+		     		<p:commandButton id="inserir" value="Inserir"
+		     		 actionListener="#{gastosBean.inserirRegistro()}" />
+				    <p:commandButton id="cancelar" value="Cancelar" actionListener="#{gastosBean.cancelar()}" process="@this" update="painelCadastro">
+	                    <f:ajax render="painelCadastro" resetValues="true" />
+	                </p:commandButton>
+                </p:panelGrid>
+            </p:panel>
+           	<p:panel id="painelBuscas">
+               	<p:panelGrid id="painelBusca" style="display: inline;" styleClass="ui-panelgrid-blank" columns="1">
+                   	<p:column>
+                       	<p:inputText id="busca" value="#{gastosBean.idBusca}" placeholder="Buscar por ID" />
+                       	<p:commandButton  id="buscar" value="OK" process="buscar busca" actionListener="#{gastosBean.buscar()}"/>                       	
+                   	</p:column>
+               	</p:panelGrid>
+           	</p:panel>
+	        <p:dataTable id="listaGastos" var="gasto" value="#{gastosBean.listaGastos}" showGridlines="true">
+	            <p:column headerText="ID">
+					<h:outputText value="#{gasto.id}" styleClass="negrito" />
+	            </p:column>
+	            <p:column headerText="Descrição do gasto">
+					<h:outputText value="#{gasto.descricao}" styleClass="negrito" />
+	            </p:column>
+	            <p:column headerText="Nome da Pessoa">
+	                <h:outputText value="#{gasto.nomePessoa}" />
+	            </p:column>
+	            <p:column headerText="Data/Hora">
+	                <h:outputText value="#{gasto.dataHora}">
+	                	 <f:convertDateTime type="date" pattern="dd/MM/yyyy HH:mm:ss" locale="pt_BR" />
+	                 </h:outputText>
+	            </p:column>
+	            <p:column headerText="Valor">
+	                <h:outputText value="#{gasto.valor}">
+	                	<f:convertNumber type="currency" currencySymbol="" locale="pt_BR" styleClass="negrito"/>
+	                </h:outputText>
+	            </p:column>
+	            <p:column headerText="Tags">
+	                <h:outputText value="#{gasto.tags}" />
+	            </p:column>
+                <p:column headerText="#{msg['label.acoes']}" style="width: 80px;">
+                       <p:commandButton icon="pi pi-pencil" title="Editar" actionListener="#{gastosBean.editarRegistro}" process="@this" update=":form:painelCadastro" />
+                </p:column>
+                <p:column headerText="#{msg['label.acoes']}" style="width: 80px;">
+                    <p:commandButton icon="pi pi-times" title="Excluir" actionListener="#{gastosBean.excluirRegistro()}" process="@this"   />
+                </p:column> 
+	        </p:dataTable>
+        </h:form>
+</ui:composition>
